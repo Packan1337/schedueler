@@ -1,25 +1,33 @@
 from modules import *
 
+
+
 class Event:
 
     @staticmethod
-    def extractor(xlsx_path: str):
+    def find_row_index(df, name):
+        row_index = df[df['Unnamed: 0'] == name].index[0]
+        print(row_index)
+        return row_index
+
+
+    @staticmethod
+    def extractor(xlsx_path: str, name: str):
         df = pd.read_excel(
-        "test_scheduel.xlsx", 
-        sheet_name=0,
-        index_col=0)
+            xlsx_path,
+            sheet_name=0)
 
         values = {}
 
         for i, column in enumerate(df.columns):
             value1 = column
-            value2 = df.iloc[5, i]
+            value2 = df.iloc[Event.find_row_index(df, name), i]
 
             if pd.notnull(value2):
                 values[value1] = value2
-            
-        print(values)
+
         return values
+
 
     @staticmethod
     def create_event(values):
@@ -41,23 +49,24 @@ class Event:
         service = build('calendar', 'v3', credentials=creds)
 
         for date, shift_time in values.items():
-            start, end = shift_time.split("-")
-            event_date = date.strftime("2023-%m-%d")
-            event_start = f"{event_date}T{start}:00"
-            event_end = f"{event_date}T{end}:00"
+            if '-' in shift_time:
+                start, end = shift_time.split("-")
+                event_date = date.strftime("2023-%m-%d")
+                event_start = f"{event_date}T{start}:00"
+                event_end = f"{event_date}T{end}:00"
 
-            event = {
-                'summary': 'Jobb',
-                'start': {
-                    'dateTime': event_start,
-                    'timeZone': 'Europe/Stockholm',
-                },
-                'end': {
-                    'dateTime': event_end,
-                    'timeZone': 'Europe/Stockholm',
-                },
-            }
+                event = {
+                    'summary': 'Jobb',
+                    'start': {
+                        'dateTime': event_start,
+                        'timeZone': 'Europe/Stockholm',
+                    },
+                    'end': {
+                        'dateTime': event_end,
+                        'timeZone': 'Europe/Stockholm',
+                    },
+                }
 
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            link_to_event = (event.get('htmlLink'))
-            print(f"Event created: {link_to_event}")
+                event = service.events().insert(calendarId='primary', body=event).execute()
+                link_to_event = (event.get('htmlLink'))
+                print(f"Event created: {link_to_event}")
