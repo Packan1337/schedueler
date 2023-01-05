@@ -3,7 +3,6 @@ from modules import *
 
 
 class Event:
-
     @staticmethod
     def find_row_index(df, name):
         row_index = df[df['Unnamed: 0'] == name].index[0]

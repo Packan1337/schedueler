@@ -1,6 +1,7 @@
 from modules import *
 from transferer import *
+from windows import *
 
-xlsx_file = "test_scheduel.xlsx"
+sg.theme("DarkAmber")
 
-Event.create_event(Event.extractor(xlsx_file, "Aria"))
+Window.main_window()
