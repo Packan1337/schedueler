@@ -69,7 +69,8 @@ class Window:
 
             elif event == "-YES-":
                 Event.create_event(Event.extractor(file_to_verify, employee))
-
+                break
+            
             elif event == "-NO-":
                 break
 
