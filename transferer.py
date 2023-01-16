@@ -1,11 +1,11 @@
 from modules import *
 
-
+column = 'Unnamed: 0'
 
 class Event:
     @staticmethod
     def find_row_index(df, name):
-        row_index = df[df['Unnamed: 0'] == name].index[0]
+        row_index = df[df[column] == name].index[0]
         return row_index
 
 
@@ -65,6 +65,8 @@ class Event:
                     },
                 }
 
-                event = service.events().insert(calendarId='primary', body=event).execute()
+                event = service.events().insert(
+                    calendarId='primary', 
+                    body=event).execute()
                 link_to_event = (event.get('htmlLink'))
                 print(f"✅ Event created: {link_to_event}")
