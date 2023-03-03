@@ -2,12 +2,12 @@ from modules import *
 
 column = 'Unnamed: 0'
 
+
 class Event:
     @staticmethod
     def find_row_index(df, name):
         row_index = df[df[column] == name].index[0]
         return row_index
-
 
     @staticmethod
     def extractor(xlsx_path: str, name: str):
@@ -25,7 +25,6 @@ class Event:
                 values[value1] = value2
 
         return values
-
 
     @staticmethod
     def create_event(values):
@@ -66,7 +65,7 @@ class Event:
                 }
 
                 event = service.events().insert(
-                    calendarId='primary', 
+                    calendarId='primary',
                     body=event).execute()
                 link_to_event = (event.get('htmlLink'))
                 print(f"✅ Event created: {link_to_event}")
